@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia Quiz Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Trivia Quiz Game</h1>
+        <div id="setup">
+            <label for="category">Category:</label>
+            <select id="category">
+                {% for category in categories %}
+                    <option value="{{ category }}">{{ category }}</option>
+                {% endfor %}
+            </select>
+            <br><br>
+            <label for="difficulty">Difficulty:</label>
+            <select id="difficulty">
+                {% for difficulty in difficulties %}
+                    <option value="{{ difficulty }}">{{ difficulty }}</option>
+                {% endfor %}
+            </select>
+            <br><br>
+            <button id="start-btn">Start Quiz</button>
+        </div>
+        <div id="quiz" style="display: none;">
+            <div class="question" id="question"></div>
+            <div class="answers" id="answers"></div>
+            <div class="score" id="score"></div>
+            <button id="next-btn" style="display: none;">Next Question</button>
+        </div>
+    </div>
+
+    <script>
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        document.getElementById("start-btn").addEventListener("click", async () => {
+            const category = document.getElementById("category").value;
+            const difficulty = document.getElementById("difficulty").value;
+
+            const response = await fetch("/start_quiz", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ category, difficulty }),
+            });
+
+            if (response.ok) {
+                questions = await response.json();
+                document.getElementById("setup").style.display = "none";
+                document.getElementById("quiz").style.display = "block";
+                showQuestion();
+            } else {
+                alert("Failed to start quiz. Please try again.");
+            }
+        });
+
+        function showQuestion() {
+            const question = questions[currentQuestionIndex];
+            document.getElementById("question").textContent = question.question;
+
+            const answersDiv = document.getElementById("answers");
+            answersDiv.innerHTML = "";
+            const answers = [...question.incorrect_answers, question.correct_answer];
+            answers.sort(() => Math.random() - 0.5); // Shuffle answers
+
+            answers.forEach(answer => {
+                const button = document.createElement("button");
+                button.className = "answer";
+                button.textContent = answer;
+                button.addEventListener("click", () => checkAnswer(answer, question.correct_answer));
+                answersDiv.appendChild(button);
+            });
+
+            document.getElementById("score").textContent = `Score: ${score}`;
+        }
+
+        async function checkAnswer(userAnswer, correctAnswer) {
+            const response = await fetch("/submit_answer", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ user_answer: userAnswer, correct_answer: correctAnswer }),
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                if (result.correct) {
+                    score++;
+                    alert("Correct!");
+                } else {
+                    alert(`Wrong! The correct answer was: ${correctAnswer}`);
+                }
+
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    showQuestion();
+                } else {
+                    alert(`Quiz finished! Your final score is: ${score}/${questions.length}`);
+                    resetQuiz();
+                }
+            }
+        }
+
+        function resetQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            document.getElementById("setup").style.display = "block";
+            document.getElementById("quiz").style.display = "none";
+        }
+    </script>
+</body>
+</html>
