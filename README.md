@@ -1,44 +1,45 @@
+# Triviza Quiz Game
 
----
+## Overview
+The **Triviza Quiz Game** is an interactive trivia quiz application that allows users to:
+- Select a **category** and **difficulty level** for the quiz.
+- Answer multiple-choice questions fetched from the **Open Trivia Database API**.
+- Receive immediate feedback on their answers.
+- Track their score throughout the quiz.
+- Restart the quiz with the same set of questions or reset to fetch new questions.
 
-### Explanation of the README.md Structure
+## Features
+### Multiple Categories
+- Users can choose from categories like General Knowledge, Science, History, etc.
 
-1. **Title**:
-   - `# Triviza Quiz Game`: The main title of the project.
+### Difficulty Levels
+- Questions can be set to **easy**, **medium**, or **hard** difficulty.
 
-2. **Overview**:
-   - A brief description of what the project does, written in bullet points for clarity.
+### Dynamic Question Fetching
+- Questions are fetched from the **Open Trivia Database API** based on user selections.
 
-3. **Features**:
-   - Each feature is listed under a subheading (`###`) with a brief description.
+### Score Tracking
+- The user’s score is displayed and updated after each question.
 
-4. **Technologies Used**:
-   - Lists the technologies and tools used in the project, categorized by backend, frontend, and APIs.
+### Shuffled Questions and Answers
+- Questions and answer choices are shuffled to make the quiz more engaging.
 
-5. **How to Run the Project**:
-   - Step-by-step instructions for setting up and running the project locally.
+### Restart and Reset Options
+- Users can restart the quiz with the same questions or reset to fetch new questions.
 
-6. **Project Structure**:
-   - A tree structure showing the organization of files and folders in the project.
+## Technologies Used
+### Backend
+- **Flask**: A lightweight Python web framework for handling HTTP requests and serving the frontend.
+- **Requests**: A Python library for making HTTP requests to the Open Trivia Database API.
 
-7. **License**:
-   - Specifies the license under which the project is distributed (e.g., MIT License).
+### Frontend
+- **HTML/CSS**: For the user interface and styling.
+- **JavaScript**: For dynamic interactions and handling user input.
 
-8. **Contributing**:
-   - Encourages contributions and provides guidelines for contributing to the project.
+### APIs
+- **Open Trivia Database API**: Provides trivia questions and answers.
 
-9. **Acknowledgments**:
-   - Credits external resources or tools used in the project.
-
----
-
-### How to Use This README.md
-
-1. Copy the above Markdown content.
-2. Paste it into a file named `README.md` in the root of your project directory.
-3. Customize the content (e.g., replace `your-username` with your GitHub username).
-4. Push the changes to your GitHub repository.
-
----
-
-This README.md file provides a clear and professional overview of your project, making it easy for others to understand and contribute. Let me know if you need further assistance!
+## How to Run the Project
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/triviza-quiz-game.git
